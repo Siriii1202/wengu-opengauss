@@ -1,0 +1,45 @@
+name: wengu-lab
+services:
+  web:
+    build: .
+    restart: on-failure:5
+    ports:
+      - "127.0.0.1:${WEB_PORT:-8788}:8788"
+    environment:
+      APP_PASSWORD: ${APP_PASSWORD:?Set APP_PASSWORD in .env}
+      PUBLIC_URL: ${PUBLIC_URL:-http://localhost:8788}
+      PGHOST: ${PGHOST:-db}
+      PGPORT: ${PGPORT:-5432}
+      PGDATABASE: ${PGDATABASE:-wengu_lab}
+      PGUSER: ${PGUSER:-wengu_app}
+      PGPASSWORD: ${PGPASSWORD:?Set PGPASSWORD in .env}
+      TZ: Asia/Shanghai
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:8788/health').then(r=>process.exit(r.ok?0:1),()=>process.exit(1))"]
+      start_period: 90s
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  db:
+    profiles: ["bundled"]
+    image: enmotech/opengauss-lite:5.0.3@sha256:eeb52c3c8ab05322f4b97db4445fa6d55ce5376eecf9697ae845d02c4db5b013
+    privileged: true
+    command: ["gaussdb", "-c", "password_encryption_type=0"]
+    restart: unless-stopped
+    environment:
+      GS_DB: postgres
+      GS_PASSWORD: "InitA7@${GAUSS_ADMIN_PASSWORD:-}"
+      WENGU_ADMIN_PASSWORD: ${GAUSS_ADMIN_PASSWORD:-}
+      GS_HOST_AUTH_METHOD: md5
+      WENGU_DB_PASSWORD: ${PGPASSWORD:?Set PGPASSWORD in .env}
+      TZ: Asia/Shanghai
+    volumes:
+      - study-data:/var/lib/opengauss
+      - ./db/init-user.sh:/docker-entrypoint-initdb.d/10-wengu-user.sh:ro
+
+volumes:
+  study-data:
+
+
+
