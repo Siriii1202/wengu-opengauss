@@ -1,6 +1,14 @@
-# 温故 · 滚动复习
+# 温故 Wengu · 学习记录与滚动复习
 
-温故是一个可以在自己电脑上运行的滚动复习网站。学完一个知识点后，记下科目、学习日期和要点，网站会按复习周期生成任务。每天打开「今日学习」，就能看到到期和逾期的内容；复习后还可以根据记忆情况安排加强复习。
+温故是一个适合考研和自学的滚动复习网站。学完记一条知识点，选好复习间隔，每天打开「今日学习」就能看到到期和逾期的复习清单。
+
+Wengu is a self-hosted spaced repetition planner. Log what you learn, set your review intervals, and see what to review each day.
+
+![温故首页，左侧记录学习，右侧显示今日复习清单](wengu-dashboard.png)
+
+*首页截图使用项目自带的示例数据。*
+
+[Docker 快速启动](#docker-快速启动) · [从一条学习记录开始](#从一条学习记录开始)
 
 ## 从一条学习记录开始
 
